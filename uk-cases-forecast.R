@@ -1,9 +1,11 @@
-# Coronavirus cases UK forecast
+# Coronavirus UK cases forecast
+# Author: Paul Maunders 
+# Twitter: @paulmaunders
 
 rm(list=ls()); # Clear environment
 library(jsonlite)
 
-forecast_cases <- 50000
+forecast_cases <- 200000
 previous_days <- 60
 total_days <- previous_days * 2
 
@@ -25,31 +27,32 @@ length(cases) <- total_days
 # cex = character expansion factor - 1.2 means 20% bigger
 plot(days, cases, pch = 16, cex=1.2, ylim=c(0,forecast_cases*1.2))
 
-
+# Add titles to the graph
 mtext(side=3, line=2, at=-0.1, adj=0, cex=1.3, paste("UK Coronavirus Cases - Last",previous_days,"days"))
 mtext(side=3, line=1, at=-0.1, adj=0, cex=1.0, format(Sys.Date(),'%A %d %B %Y') )
 mtext(side=3, line=0, at=-0.1, adj=0, cex=0.8, "Graph by @paulmaunders - Source: coronavirus.data.gov.uk")
 
-# exponential fit
+# Create an exponential fit model
 fit <- lm(log(cases) ~ days) # find the natural logarithm power relationship between days and cases
 predicted_cases <- exp(predict(fit, data.frame(days))) # predict daily cases using fit model
 lines(days, predicted_cases, col="red", lwd=2, lty=2) # plot prediction on graph
+
 # Straight lines v - vertical, h - horizontal
 abline(v=previous_days, col="blue") # today
-abline(h=50000, col="grey") # 50,000 cases
-forecast_case_day = min(which(predicted_cases > 50000))
-abline(v=forecast_case_day, col="grey") # predict days to forecast cases
-points(forecast_case_day, predicted_cases[forecast_case_day], col="red")
-# You can recreate formula from model using co-coefficients, e.g.
+abline(h=forecast_cases, col="grey") # 50,000 cases
 
-days_to_forecast_cases <- forecast_case_day - previous_days
-text(0, 50000 * 1.05, pos=4, paste("Exponential growth trend:",format(forecast_cases, big.mark = ","), "cases in",forecast_case_day - previous_days, "days"))
+# Forecast the day when cases will reach forecast_cases
+forecast_case_day = min(which(predicted_cases > forecast_cases)) # look up the first day in the model which exceeds forecast_cases
+abline(v=forecast_case_day, col="grey") # draw a vertical line to mark this day
+points(forecast_case_day, predicted_cases[forecast_case_day], col="red") # mark this point on the exponential growth curve
+days_to_forecast_cases <- forecast_case_day - previous_days # subtract the historic case days to see how many days from today to forecast_case_day
+text(0, forecast_cases * 1.05, pos=4, paste("Exponential growth trend:",format(forecast_cases, big.mark = ",", scientific = F), "cases in",forecast_case_day - previous_days, "days"))
 text(forecast_case_day, 0, pos=4, srt=90, format(Sys.Date() + days_to_forecast_cases,'%A %d %B %Y'))
 
 # print(predicted_cases)
 
 
-
+# You can recreate formula from model using co-coefficients, e.g.
 #summary(fit)
 #Formula to predict cases is along the lines of... model coefficients can be found using summary(fit)
 #y = e ^ (7.68335 + x) 
