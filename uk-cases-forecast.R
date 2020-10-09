@@ -38,8 +38,8 @@ predicted_cases <- exp(predict(fit, data.frame(days))) # predict daily cases usi
 lines(days, predicted_cases, col="red", lwd=2, lty=2) # plot prediction on graph
 
 # Straight lines v - vertical, h - horizontal
-abline(v=previous_days, col="blue") # today
-abline(h=forecast_cases, col="grey") # 50,000 cases
+abline(v=previous_days, col="blue") # vertical line showing today
+abline(h=forecast_cases, col="grey") # horizontal line showing forecast cases
 
 # Forecast the day when cases will reach forecast_cases
 forecast_case_day = min(which(predicted_cases > forecast_cases)) # look up the first day in the model which exceeds forecast_cases
