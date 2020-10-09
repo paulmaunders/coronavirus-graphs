@@ -68,6 +68,6 @@ p <- ggplot(df, aes(days, cases)) +
   geom_point(aes(x=forecast_case_day, y=predicted_cases[forecast_case_day + previous_days]), color="red") +  # mark this point on the exponential growth curve
   
   # Add titles
-  labs(title=paste("UK Coronavirus Cases - Last",previous_days,"days"), subtitle=format(update_date,'%A %d %B %Y'), caption="Graph by @paulmaunders")
+  labs(title=paste("UK Daily New Coronavirus Cases - Last",previous_days,"days"), subtitle=format(update_date,'%A %d %B %Y'), caption="Graph by @paulmaunders - Data from coronavirus.data.gov.uk")
 
 print(p)
