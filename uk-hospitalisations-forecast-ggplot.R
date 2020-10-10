@@ -41,6 +41,9 @@ df <- data.frame(days,patients, predicted_patients)
 names(df) <- c("days","patients", "predicted_patients")
 #print(df)
 
+# Build formula from model for display purposes
+exponential_fit = paste("y = e ^ (", format(round(fit$coefficients[1], 4), nsmall = 2) , " + ", format(round(fit$coefficients[2], 4), nsmall = 2), " * x)", sep="")
+
 # Plot graph using ggplot
 
 p <- ggplot(df, aes(days, patients)) + 
@@ -48,25 +51,25 @@ p <- ggplot(df, aes(days, patients)) +
   # Set default font family and colour  
   theme(text = element_text(family = "Courier", color = "grey20")) +
   
-  theme_bw(base_size = 20) +
+  theme_light(base_size = 14) +
   
   # Add points
   geom_point() +
-  
+  #paste("Exponential Fit", formula)
   # Add exponential fit line
-  geom_line(data = df, aes(days, predicted_patients, color = "Exponential Fit"), size = 1, linetype = 2) +
+  geom_line(data = df, aes(days, predicted_patients, color = exponential_fit), size = 1, linetype = 2) +
   
   # Add vertical line showing today
   geom_vline(xintercept = 0, linetype="solid", color = "blue", size=0.5) +
-  annotate("text", x=1, y=0, vjust="top", hjust="left", label="Today", colour="grey20", angle=90, size=4, family = "Courier") +
+  annotate("text", x=1, y=0, vjust="top", hjust="left", label="Today", colour="grey20", angle=90, size=3, family = "Courier") +
   
   # Add vertical line showing when forecast patients may occur according to model
   geom_vline(xintercept = forecast_patient_day, linetype="dotted", color="grey", size=1) + 
-  annotate("text", x=forecast_patient_day+1, y=forecast_patients/2, vjust="top", label=format(update_date + forecast_patient_day,'%A %d %B %Y'), colour="grey20", angle=90, size=4, family = "Courier") +
+  annotate("text", x=forecast_patient_day+1, y=forecast_patients/2, vjust="top", label=format(update_date + forecast_patient_day,'%A %d %B %Y'), colour="grey20", angle=90, size=3, family = "Courier") +
   
   # Add horizontal line for forecast patients
   geom_hline(yintercept = forecast_patients, linetype="dotted", color="grey", size=1) + 
-  annotate("text", x=-previous_days, hjust="left", label=paste("Exponential growth trend:",format(forecast_patients, big.mark = ",", scientific = F), "patients in",forecast_patient_day, "days"), y=forecast_patients*1.05, colour="grey20",size=5, family = "Courier") + 
+  annotate("text", x=-previous_days, hjust="left", label=paste("Exponential growth trend:",format(forecast_patients, big.mark = ",", scientific = F), "patients in",forecast_patient_day, "days"), y=forecast_patients*1.05, colour="grey20",size=3, family = "Courier") + 
   
   # Mark where patients exceed forecast on exponential curve
   geom_point(aes(x=forecast_patient_day, y=predicted_patients[forecast_patient_day + previous_days]), color="red") +  # mark this point on the exponential growth curve
@@ -78,6 +81,4 @@ print(p)
 
 
 aspect_ratio <- 2
-height <- 7
-ggsave(plot=p, filename = paste("~/Desktop/england-hospitalisations-", update_date, ".png", sep=""), device="png", dpi=300, height = 7 , width = 7 * aspect_ratio)
-
+ggsave(plot=p, filename = paste("~/Desktop/england-hospitalisations-", update_date, ".png", sep=""), device="png", dpi=300, height = 5 , width = 5 * aspect_ratio)
