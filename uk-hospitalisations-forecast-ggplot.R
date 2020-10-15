@@ -8,7 +8,7 @@ library(ggplot2)
 
 forecast_patients <- 17000
 previous_days <- 40
-future_days <- 40
+future_days <- 30
 total_days <- previous_days + future_days
 
 # Set up X axis to the total days you wish you forecast
