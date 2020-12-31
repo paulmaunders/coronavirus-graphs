@@ -9,7 +9,7 @@ library('incidence')
 library('ggplot2')
 
 #  Set how many days you wish to see
-last <- 60
+last <- 21
 
 # Import data from coronavirus API
 govapi <- fromJSON("https://api.coronavirus.data.gov.uk/v1/data?filters=areaName=United%2520Kingdom;areaType=overview&structure=%7B%22areaType%22:%22areaType%22,%22areaName%22:%22areaName%22,%22areaCode%22:%22areaCode%22,%22date%22:%22date%22,%22newCasesByPublishDate%22:%22newCasesByPublishDate%22,%22cumCasesByPublishDate%22:%22cumCasesByPublishDate%22%7D&format=json")
@@ -24,8 +24,8 @@ rows <- length(i$counts)
 fit.second <- fit(i[(rows-last):(rows)])
 
 # Create label text to go on the graph to show daily growth rates / doubling times etc from the model
-label_text <- paste("Last 60 days model:", "\n", "Daily growth rate: ", round(fit.second$info$r*100, digits = 2), "%\n", 
-                    "Doubling time: ", round(fit.second$info$doubling, digits = 2), " days",
+label_text <- paste("Last ", last ," days model:", "\n", "Daily growth rate: ", round(fit.second$info$r*100, digits = 1), "%\n", 
+                    "Doubling time: ", round(fit.second$info$doubling, digits = 1), " days",
                     sep="")
 
 # Plot the graph

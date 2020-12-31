@@ -30,7 +30,9 @@ update_date <- tests$date[1]
 
 # Merge data sets by date key
 data = merge(tests, cases, by="date");
-length(data) <- 200
+
+# Get most recent data
+data <- tail(data, 90)
 
 # Create new column for positive test rate
 data$PostitiveRate <- data$newCasesByPublishDate / data$newPCRTestsByPublishDate
@@ -39,9 +41,6 @@ data$PostitiveRate <- data$newCasesByPublishDate / data$newPCRTestsByPublishDate
 # Add some extra dates to see if we can get the trend line to extrapolate
 #data <- rbind(data, c("2020-10-10",NA,NA,NA,NA,NA,NA,NA,NA,0.0312))
 #data$date <- as.Date(data$date , format = "%Y-%m-%d") 
-
-# Find which day we first exceed 100k tests
-hundredk_tests_day = data[ which(data$newPCRTestsByPublishDate >= 100000),]$date[1]
 
 # Plot graph using ggplot
 
@@ -64,10 +63,6 @@ p <- ggplot(data, aes(x=date,y=PostitiveRate)) +
   # fullrange parameter extends the line
   stat_smooth(method = "gam", formula = y ~ s(x), size = 1, fullrange=F) +
   
-  # Add vertical line showing today
-  geom_vline(xintercept = hundredk_tests_day, linetype="solid", color = "blue", size=0.5) +
-  annotate("text", x=hundredk_tests_day+2, y=.05, vjust="top", hjust="left", label="100,000 tests per day", colour="grey20", angle=90, size=3, family = "Courier") +
-
   # Add titles
   labs(title="UK Coronavirus Positive Test Rate", subtitle=format(update_date,'%A %d %B %Y'), caption="Graph by @paulmaunders using R and ggplot. Data from coronavirus.data.gov.uk")
 
