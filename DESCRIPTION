@@ -1,0 +1,19 @@
+Type: Compendium
+Package: UK Coronavirus Graphs
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.1
+Authors@R: 
+    person(given = "Paul",
+           family = "Maunders",
+           role = c("aut", "cre"),
+           email = "paul@maunders.net")
+Description: Building various graphs from the UK's Coronavirus Dashboard data
+License: MIT
+Depends: 
+    ggplot2,
+    incidence,
+    jsonlite,
+    mgcv,
+    scales
+Encoding: UTF-8
+LazyData: true
